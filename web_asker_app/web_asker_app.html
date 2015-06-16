@@ -1,0 +1,31 @@
+<head>
+    <title>Web Asker</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Web Asker</h1>
+        </header>
+
+        <div>
+            {{> question}}
+
+            {{#each candidates}}
+                {{> candidate}}
+            {{/each}}
+
+        </div>
+    </div>
+
+</body>
+
+<template name="candidate">
+    <div>
+        <button type="button" class="action"> {{text}} </button>
+    </div>
+</template>
+
+<template name="question">
+    <h2>{{name}}</h2>
+</template>
