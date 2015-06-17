@@ -34,10 +34,11 @@ class WebAsker(object):
         self._questions_col = client[db_name]["questions"]
         self._mogo_db_id = None
 
-    def ask(self, question, answer_list, auto_remove=True):
+    def ask(self, question, answer_list, priority=0, auto_remove=True):
         question_id = self._questions_col.insert({
             "text" : question,
             "answer_candidates" : [{"text" : a} for a in answer_list],
+            "priority": priority
             })
         return WebQuestion(question_id, self._questions_col, auto_remove)
 
