@@ -18,13 +18,17 @@
 </body>
 
 <template name="question">
-    <h2>{{text}}</h2>
+    <div class="question">
+        <h2>{{text}}</h2>
 
-    {{#if answer}}
-        <p> Thank you! Your answer : {{answer}} </p>
-    {{else}}
-        {{#each answer_candidates}}
-            <button type="button" class="answer"> {{text}} </button>
-        {{/each}}
-    {{/if}}
+        {{#if answer}}
+            <p> Thank you! Your answer : {{answer}} </p>
+        {{else}}
+            {{#each answer_candidates}}
+                <div>
+                    <button type="button" class="answer"> {{text}} </button>                
+                </div>
+            {{/each}}
+        {{/if}}
+    </div>
 </template>
