@@ -29,7 +29,7 @@ class WebAsker(object):
     def __init__(self, mongo_db_adress):
         client = MongoClient(mongo_db_adress)
 
-        self._questions_col = client["meteor"]["questions"]
+        self._questions_col = client["web_asker_db"]["questions"]
         self._mogo_db_id = None
 
     def ask(self, question, answer_list):
