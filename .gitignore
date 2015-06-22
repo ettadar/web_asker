@@ -1,0 +1,5 @@
+web_asker_api/test/mongo_adress_list.json
+web_asker_app/deploy.sh
+web_asker_app/web_asker_app.tar.gz
+*/*.json
+*.pyc
