@@ -27,6 +27,17 @@ class WebQuestion(object):
     def remove(self):
         self._questions_col.remove({"_id" : self._mogo_db_id})
 
+class WebPlot(object):
+    def __init__(self, mongo_db_id, questions_col):
+        self._mogo_db_id = mongo_db_id
+        self._questions_col = questions_col
+
+    def update(self, data):
+        self._questions_col.update({'_id':self._mogo_db_id}, {"$set": {"data" : list(data)}})
+
+    def remove(self):
+        self._questions_col.remove({"_id" : self._mogo_db_id})
+
 class WebAsker(object):
     def __init__(self, mongo_db_adress):
         client = MongoClient(mongo_db_adress)
@@ -42,6 +53,14 @@ class WebAsker(object):
             "priority": priority
             })
         return WebQuestion(question_id, self._questions_col, auto_remove)
+
+    def plot(self, data, priority=0):
+        question_id = self._questions_col.insert({
+            "plot" : "circles",
+            "data" : list(data),
+            "priority": priority
+            })
+        return WebPlot(question_id, self._questions_col)
 
     def clear_all(self):
         self._questions_col.remove()

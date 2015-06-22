@@ -9,7 +9,11 @@
         </header>
         <div>
             {{#each questions}}
-                {{> question}}
+                {{#if plot}}
+                    {{> vis}}
+                {{else}}
+                    {{> question}}
+                {{/if}}
             {{/each}}
         </div>
 
@@ -30,5 +34,11 @@
                 </div>
             {{/each}}
         {{/if}}
+    </div>
+</template>
+
+<template name="vis">
+    <div class="question">
+        <div id="circles"></div>
     </div>
 </template>
