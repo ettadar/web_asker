@@ -28,9 +28,10 @@ class WebQuestion(object):
         self._questions_col.remove({"_id" : self._mogo_db_id})
 
 class WebAsker(object):
-    def __init__(self, mongo_db_adress, db_name="web_asker_db"):
+    def __init__(self, mongo_db_adress):
         client = MongoClient(mongo_db_adress)
 
+        db_name = mongo_db_adress.split("/")[-1]
         self._questions_col = client[db_name]["questions"]
         self._mogo_db_id = None
 
