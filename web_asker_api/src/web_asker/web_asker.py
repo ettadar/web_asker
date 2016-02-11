@@ -1,8 +1,7 @@
-import subprocess
-import os
 import time
 
 from pymongo import MongoClient
+
 
 class WebQuestion(object):
     def __init__(self, mongo_db_id, questions_col, auto_remove):
@@ -12,12 +11,12 @@ class WebQuestion(object):
 
     def answered(self):
         return self._questions_col.find_one({
-            "answer" : {"$exists" : True},"_id" : self._mogo_db_id}) is not None
+                "answer": {"$exists": True}, "_id": self._mogo_db_id}) is not None
 
     def get_answer(self):
         while True:
             result = self._questions_col.find_one({
-                "answer" : {"$exists" : True}, "_id" : self._mogo_db_id})
+                "answer": {"$exists": True}, "_id": self._mogo_db_id})
             if result is not None:
                 if self._auto_remove:
                     self.remove()
@@ -25,7 +24,8 @@ class WebQuestion(object):
             time.sleep(0.1)
 
     def remove(self):
-        self._questions_col.remove({"_id" : self._mogo_db_id})
+        self._questions_col.remove({"_id": self._mogo_db_id})
+
 
 class WebAsker(object):
     def __init__(self, mongo_db_adress):

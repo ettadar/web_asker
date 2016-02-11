@@ -31,9 +31,9 @@ else:
 
     while True:
         if pause_question.answered():
-            feedback_question.remove()        
+            feedback_question.remove()
             pause_question.remove()
-            
+
             web_asker.ask("Restart ?", ["Restart !"], priority=10).get_answer()
 
             pause_question = web_asker.ask("Pause ?", ["Pause !"], priority=10)
@@ -43,7 +43,7 @@ else:
                 feedback_question.remove()
 
             feedback_question = web_asker.ask("Rate behavior from {}s to {}s :".format(last_t, last_t + window),
-                ["0", "1", "2"])
+                                              ["0", "1", "2"])
 
             last_t = int(t)
 
