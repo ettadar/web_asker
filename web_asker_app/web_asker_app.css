@@ -46,6 +46,22 @@ div .question{
   border-radius: 10px;
 }
 
+.question[color=grey]{
+  background-color: #eee;
+}
+
+.question[color=blue]{
+  background-color: #88e;
+}
+
+.question[color=red]{
+  background-color: #e88;
+}
+
+.question[color=green]{
+  background-color: #8e8;
+}
+
 button {
   width: 100%;
   font-size: 20px;
