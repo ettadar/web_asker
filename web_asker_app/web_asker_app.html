@@ -5,7 +5,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Web Asker</h1>
+            <h1 class="app-name">Web Asker</h1>
         </header>
         <div>
             {{#each questions}}
@@ -18,17 +18,19 @@
 </body>
 
 <template name="question">
-    <div class="question" color={{color}}>
-        <h2>{{text}}</h2>
+    <div class="question" data-color={{color}}>
+        <h2 class="question--header">{{text}}</h2>
 
-        {{#if answer}}
-            <p> Thank you! Your choice : {{answer}} </p>
-        {{else}}
-            {{#each answer_candidates}}
-                <div>
-                    <button type="button" class="answer"> {{text}} </button>
-                </div>
-            {{/each}}
-        {{/if}}
+        <div class="answers">
+            {{#if answer}}
+                <p> Thank you! Your choice: {{answer}} </p>
+            {{else}}
+                {{#each answer_candidates}}
+                    <div class="answer">
+                        <button type="button"> {{text}} </button>
+                    </div>
+                {{/each}}
+            {{/if}}
+        </div>
     </div>
 </template>
