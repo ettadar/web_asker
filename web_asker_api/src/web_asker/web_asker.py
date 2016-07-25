@@ -97,11 +97,19 @@ class WebAsker(object):
         return [answer[0] for answers in self.answers_dict.values() for answer in answers]
 
     def update_vocabulary(self):
-        print("You can say: {}".format(self.all_answers_of_all_questions))
-        self.client.speech.params.set_vocabulary(self.all_answers_of_all_questions, language='en-US')
-        self.client.speech.params.send_params()
+        if len(self.answers_dict) == 0:
+            speech = ['uncopyrightable']
+        else:
+            print("You can say: {}".format(self.all_answers_of_all_questions))
+            speech = self.all_answers_of_all_questions
+
+        self.client.speech.params.set_vocabulary(speech, language='en-GB')
+        error = self.client.speech.params.send_params()
+        assert error == '', error
 
     def clear_all(self):
         self.questions_col.remove()
-        self.client.speech.params.set_vocabulary([])
-        self.client.speech.params.send_params()
+        self.answers_dict = {}
+        self.client.speech.params.set_vocabulary(['uncopyrightable'])
+        error = self.client.speech.params.send_params()
+        assert error == '', error
