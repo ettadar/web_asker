@@ -1,0 +1,177 @@
+<grammar version="1.0" xml:lang="en-US" mode="voice" root="toplevel" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+  <rule id="toplevel" scope="public">
+    <one-of>
+      <item>
+        <ruleref uri="#Give"/>
+        <tag> out = rules.latest(); </tag>
+      </item>
+      <item>
+        <ruleref uri="#Hold"/>
+        <tag>  out = rules.latest(); </tag>
+      </item>
+      <item>
+        <ruleref uri="#Stop"/>
+        <tag>  out.action = "stop"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Pause"/>
+        <tag>  out.action = "pause"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Unpause"/>
+        <tag>  out.action = "unpause"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Start"/>
+        <tag>  out.action = "start"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#DoIt"/>
+        <tag>  out.action = "do_it"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#DontDoThat"/>
+        <tag>  out.action = "dont_do_that"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#DoSomething"/>
+        <tag>  out.action = "do_something"; </tag>
+      </item>
+    </one-of>
+  </rule>
+
+
+  <rule id="Give">
+    <example> give me the handle please </example>
+    <example> give left </example>
+
+    <item repeat="0-1"> please </item>
+    <one-of>
+        <item> 
+          give <tag> out.action = "pick "; </tag>
+        </item>
+        <item> 
+          pick <tag> out.action = "pick "; </tag>
+        </item>
+    </one-of>
+    <item repeat="0-1"> me </item>
+    <ruleref uri="#Object"/>
+    <tag> out.object = rules.latest(); </tag>
+    <item repeat="0-1"> please </item>
+  </rule>
+
+  <rule id="Hold">
+    <example> hold the handle at pose left please </example>
+    <example> hold object handle pose right </example>
+    <example> hold side front right </example>
+
+    <item repeat="0-1"> please </item>
+    <item>
+      hold <tag> out.action = "hold "; </tag>
+    </item>
+    <ruleref uri="#Object"/>
+    <tag> out.object = rules.latest(); </tag>
+    <item repeat="0-1"> at </item>
+    <ruleref uri="#Pose"/>
+    <tag> out.pose = rules.latest(); </tag>
+    <item repeat="0-1"> please </item>
+  </rule>
+
+  <rule id="Object">
+    <item repeat="0-1"> the </item>
+    <one-of> <!-- TODO piece/object side = one-of + repeat 0-1? -->
+      <item repeat="0-1"> side </item>
+      <item>
+        front <tag> out = "/toolbox/side_front"; </tag>
+      </item>
+      <item>
+        back <tag> out = "/toolbox/side_back"; </tag>
+      </item>
+      <item>
+        left <tag> out = "/toolbox/side_left"; </tag>
+      </item>
+      <item>
+        right <tag> out = "/toolox/side_right"; </tag>
+      </item>
+      <item>
+        handle <tag> out = "/toolbox/handle"; </tag>
+      </item>
+    </one-of>
+  </rule>
+
+
+  <rule id="Pose">
+    <one-of>
+      <item>
+        left <tag> out = " 0"; </tag>
+      </item>
+      <item>
+        right <tag> out = " 1"; </tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="DoIt">
+    <item repeat="0-1"> yes </item>
+    <one-of>
+      <item>
+        do it
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="DoSomething">
+    <item repeat="0-1"> yes </item>
+    <one-of>
+      <item>
+        do something
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="DontDoThat">
+    <item repeat="0-1"> no </item>
+    <one-of>
+      <item>
+        don't do that
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Start">
+    <item repeat="0-1"> let's </item>
+    <one-of>
+      <item>
+        go
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Stop">
+    <one-of>
+      <item>
+        stop
+      </item>
+      <item>
+        we're done
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Pause">
+    <one-of>
+      <item>
+        pause
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Unpause">
+    <one-of>
+      <item>
+        unpause
+      </item>
+    </one-of>
+  </rule>
+
+</grammar>

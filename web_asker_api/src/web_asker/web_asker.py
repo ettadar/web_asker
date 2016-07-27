@@ -1,6 +1,10 @@
 from kinect2.client import Kinect2Client
 from pymongo import MongoClient
+from os import path
+from web_asker import __file__ as filename
 import time
+import json
+
 
 class WebQuestion(object):
     def __init__(self, mongo_db_id, asker, auto_remove):
@@ -12,18 +16,20 @@ class WebQuestion(object):
     def answered(self):
         answered_from_gui = self._asker.questions_col.find_one({
                                 "answer": {"$exists": True}, "_id": self._mogo_db_id}) is not None
-        
+
         answered_from_voice = False
         self.answer = ""
-        for answer, full_answer in self._asker.answers_dict[self._mogo_db_id]:  # example: "do it", "Do It!"
-            if self._asker.all_speech.count(answer) > 0:
-                self.answer = full_answer
+        mapped_speech = self._asker.mapped_speech
+        for answer in self._asker.answers_dict[self._mogo_db_id]:
+            if mapped_speech.count(answer) > 0:
+                self.answer = answer
                 answered_from_voice = True
                 break
 
         return answered_from_gui or answered_from_voice
 
     def get_answer(self):
+        print "expecting", self._asker.answers_dict[self._mogo_db_id]
         while True:
             answer = self.answer
             # GUI
@@ -36,14 +42,13 @@ class WebQuestion(object):
                 if self._auto_remove:
                     self.remove()
                     self.answer = ""
-                print("Answer taken into account: '{}'".format(self.answer))
+                print("Answer taken into account: '{}'".format(answer))
                 return answer
-            time.sleep(0.1)
+            time.sleep(0.02)
 
     def remove(self):
         self._asker.questions_col.remove({"_id": self._mogo_db_id})
         del self._asker.answers_dict[self._mogo_db_id]
-        self._asker.update_vocabulary()
 
 
 class WebAsker(object):
@@ -53,11 +58,15 @@ class WebAsker(object):
         self._mogo_db_id = None
         self.questions_col = client[db_name]["questions"]
         self.answers_dict = {}
-        self.all_speech = []
+        self.stamped_speech = {}
         print("Connecting to the Kinect server...")
         self.client = Kinect2Client("BAXTERFLOWERS.local")
         self.client.tts.params.set_language('english')
-        self.client.speech.params.set_vocabulary([])
+        with open(path.join(path.dirname(filename), '..', '..', 'config', 'grammar_toolbox.xml')) as f:
+            self.action_grammar = f.read()
+        with open(path.join(path.dirname(filename), '..', '..', 'config', 'speech_mapping.json')) as f:
+            self.mapping = json.load(f)
+        self.client.speech.params.set_grammar(self.action_grammar)
         self.client.speech.set_callback(self.cb_speech_received)
         self.client.speech.start()
         self.client.tts.start()
@@ -75,6 +84,30 @@ class WebAsker(object):
         string = string.replace('!', '')
         return string.lower()
 
+    @property
+    def all_speech(self):
+        # Delete speech older than 1 second ago
+        to_delete = []
+        for answer, timestamp in self.stamped_speech.iteritems():
+            if time.time() - timestamp > 1.:
+                to_delete.append(answer)
+        for answer in to_delete:
+            del self.stamped_speech[answer]
+
+        return self.stamped_speech.keys()
+
+    @property
+    def mapped_speech(self):
+        speech = []
+        for answer in self.all_speech:
+            if answer in self.mapping:
+                command = self.mapping[answer]
+            else:
+                answer = answer.split(' ')
+                command = answer[0] + '(' + ', '.join(answer[1:]) + ')'
+            speech.append(command)
+        return speech
+
     def ask(self, question, answer_list, priority=0, auto_remove=True, color="grey"):
         #print question, color
         self.client.tts.say(self.clean(question), blocking=False)
@@ -84,24 +117,12 @@ class WebAsker(object):
             "priority": priority,
             "color": color
         })
-        question_answers = [(self.clean(answer), answer) for answer in answer_list]
-        self.answers_dict.update({question_id: question_answers})
-        self.update_vocabulary()
+        self.answers_dict.update({question_id: answer_list})
         return WebQuestion(question_id, self, auto_remove)
 
     def cb_speech_received(self, speech):
-        self.all_speech.append(speech['semantics'][0])  # TODO locking  # TODO kinect_2_server: dictionary of lists???
-
-    @property
-    def all_answers_of_all_questions(self):
-        return [answer[0] for answers in self.answers_dict.values() for answer in answers]
-
-    def update_vocabulary(self):
-        print("You can say: {}".format(self.all_answers_of_all_questions))
-        self.client.speech.params.set_vocabulary(self.all_answers_of_all_questions, language='en-US')
-        self.client.speech.params.send_params()
+        self.stamped_speech[speech['semantics'][0]] = time.time()
 
     def clear_all(self):
         self.questions_col.remove()
-        self.client.speech.params.set_vocabulary([])
-        self.client.speech.params.send_params()
+        self.answers_dict = {}
