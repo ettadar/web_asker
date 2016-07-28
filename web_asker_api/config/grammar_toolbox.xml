@@ -2,6 +2,10 @@
   <rule id="toplevel" scope="public">
     <one-of>
       <item>
+        <ruleref uri="#Pick"/>
+        <tag> out = rules.latest(); </tag>
+      </item>
+      <item>
         <ruleref uri="#Give"/>
         <tag> out = rules.latest(); </tag>
       </item>
@@ -45,16 +49,26 @@
     <example> give me the handle please </example>
     <example> give left </example>
 
-    <item repeat="0-1"> please </item>
     <one-of>
         <item> 
-          give <tag> out.action = "pick "; </tag>
-        </item>
-        <item> 
-          pick <tag> out.action = "pick "; </tag>
+          give <tag> out.action = "start_give"; </tag>
         </item>
     </one-of>
     <item repeat="0-1"> me </item>
+    <ruleref uri="#Object"/>
+    <tag> out.object = rules.latest(); </tag>
+    <item repeat="0-1"> please </item>
+  </rule>
+
+  <rule id="Pick">
+    <example> pick the handle please </example>
+    <example> pick left </example>
+
+    <one-of>
+        <item> 
+          pick <tag> out.action = "start_pick"; </tag>
+        </item>
+    </one-of>
     <ruleref uri="#Object"/>
     <tag> out.object = rules.latest(); </tag>
     <item repeat="0-1"> please </item>
@@ -67,7 +81,7 @@
 
     <item repeat="0-1"> please </item>
     <item>
-      hold <tag> out.action = "hold "; </tag>
+      hold <tag> out.action = "start_hold"; </tag>
     </item>
     <ruleref uri="#Object"/>
     <tag> out.object = rules.latest(); </tag>
@@ -79,7 +93,7 @@
 
   <rule id="Object">
     <item repeat="0-1"> the </item>
-    <one-of> <!-- TODO piece/object side = one-of + repeat 0-1? -->
+    <one-of>
       <item repeat="0-1"> side </item>
       <item>
         front <tag> out = "/toolbox/side_front"; </tag>
@@ -91,7 +105,7 @@
         left <tag> out = "/toolbox/side_left"; </tag>
       </item>
       <item>
-        right <tag> out = "/toolox/side_right"; </tag>
+        right <tag> out = "/toolbox/side_right"; </tag>
       </item>
       <item>
         handle <tag> out = "/toolbox/handle"; </tag>
@@ -103,10 +117,10 @@
   <rule id="Pose">
     <one-of>
       <item>
-        left <tag> out = " 0"; </tag>
+        left <tag> out = "0"; </tag>
       </item>
       <item>
-        right <tag> out = " 1"; </tag>
+        right <tag> out = "1"; </tag>
       </item>
     </one-of>
   </rule>
@@ -150,7 +164,7 @@
   <rule id="Stop">
     <one-of>
       <item>
-        stop
+        it's over
       </item>
       <item>
         we're done
