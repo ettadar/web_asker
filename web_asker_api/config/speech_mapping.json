@@ -1,8 +1,10 @@
 { "start": "Start !",
+  "restart": "Restart !",
   "stop": "Stop !",
   "pause": "Pause !",
   "unpause": "Unpause !",
   "do_it": "Do it!",
   "dont_do_that": "Don't do that",
-  "do_something": "Do something!"
+  "do_something": "Do something!",
+  "something_else": "something else/nothing"
 }

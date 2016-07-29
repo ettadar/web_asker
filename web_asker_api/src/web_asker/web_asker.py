@@ -25,6 +25,7 @@ class WebQuestion(object):
                 self.answer = answer
                 answered_from_voice = True
                 break
+
         return answered_from_gui or answered_from_voice
 
     def get_answer(self):
@@ -65,7 +66,7 @@ class WebAsker(object):
         with open(path.join(path.dirname(filename), '..', '..', 'config', 'speech_mapping.json')) as f:
             self.mapping = json.load(f)
         self.client.speech.params.set_grammar(self.action_grammar)
-        self.client.speech.params.set_confidence(0.1)
+        self.client.speech.params.set_confidence(0.3)
         self.client.speech.set_callback(self.cb_speech_received)
         self.client.speech.start()
         self.client.tts.start()
@@ -81,6 +82,8 @@ class WebAsker(object):
         string = string.replace(')', '')
         string = string.replace('?', '')
         string = string.replace('!', '')
+        if "wanted" in string:
+            string = "Should I do one of these options"
         return string.lower()
 
     @property

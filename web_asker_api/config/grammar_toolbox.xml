@@ -30,6 +30,10 @@
         <tag>  out.action = "start"; </tag>
       </item>
       <item>
+        <ruleref uri="#Restart"/>
+        <tag>  out.action = "restart"; </tag>
+      </item>
+      <item>
         <ruleref uri="#DoIt"/>
         <tag>  out.action = "do_it"; </tag>
       </item>
@@ -40,6 +44,10 @@
       <item>
         <ruleref uri="#DoSomething"/>
         <tag>  out.action = "do_something"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#SomethingElse"/>
+        <tag>  out.action = "something_else"; </tag>
       </item>
     </one-of>
   </rule>
@@ -143,6 +151,18 @@
     </one-of>
   </rule>
 
+  <rule id="SomethingElse">
+    <one-of>
+      <item repeat="0-1"> do </item>
+      <item>
+        something else
+      </item>
+      <item>
+        nothing
+      </item>
+    </one-of>
+  </rule>
+
   <rule id="DontDoThat">
     <item repeat="0-1"> no </item>
     <one-of>
@@ -157,6 +177,15 @@
     <one-of>
       <item>
         go
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Restart">
+    <item repeat="0-1"> let's </item>
+    <one-of>
+      <item>
+        restart
       </item>
     </one-of>
   </rule>
