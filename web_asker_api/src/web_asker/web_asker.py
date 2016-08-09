@@ -20,12 +20,12 @@ class WebQuestion(object):
         answered_from_voice = False
         self.answer = ""
         mapped_speech = self._asker.mapped_speech
-        for answer in self._asker.answers_dict[self._mogo_db_id]:
-            if mapped_speech.count(answer) > 0:
-                self.answer = answer
+        for candidate_answer, key in mapped_speech:
+            if candidate_answer in self._asker.answers_dict[self._mogo_db_id]:
+                self.answer = candidate_answer
                 answered_from_voice = True
+                del self._asker.stamped_speech[key]
                 break
-
         return answered_from_gui or answered_from_voice
 
     def get_answer(self):
@@ -106,9 +106,9 @@ class WebAsker(object):
             if answer in self.mapping:
                 command = self.mapping[answer]
             else:
-                answer = answer.split(' ')
-                command = answer[0] + '(' + ', '.join(answer[1:]) + ')'
-            speech.append(command)
+                splitted_answer = answer.split(' ')
+                command = splitted_answer[0] + '(' + ', '.join(splitted_answer[1:]) + ')'
+            speech.append((command, answer))
         return speech
 
     def ask(self, question, answer_list, priority=0, auto_remove=True, color="grey"):
