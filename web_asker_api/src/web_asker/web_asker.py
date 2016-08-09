@@ -66,6 +66,7 @@ class WebAsker(object):
         with open(path.join(path.dirname(filename), '..', '..', 'config', 'speech_mapping.json')) as f:
             self.mapping = json.load(f)
         self.client.speech.params.set_grammar(self.action_grammar)
+        self.client.speech.params.use_system_mic()
         self.client.speech.params.set_confidence(0.3)
         self.client.speech.set_callback(self.cb_speech_received)
         self.client.speech.start()
