@@ -1,4 +1,4 @@
-Web Asker
+Web Asker for vocal Interaction
 =========
 
 Web Asker is a tool to ask question. It is composed of two parts : a web app that display question and record answer and a python api to ask question and treat answer. It is design for user studies in a robotic context where:
