@@ -14,6 +14,14 @@
         <tag>  out = rules.latest(); </tag>
       </item>
       <item>
+        <ruleref uri="#GoHomeRight"/>
+        <tag>  out.action = "go_home_right"; </tag>
+      </item>
+      <item>
+        <ruleref uri="#GoHomeLeft"/>
+        <tag>  out.action = "go_home_left"; </tag>
+      </item>
+      <item>
         <ruleref uri="#Stop"/>
         <tag>  out.action = "stop"; </tag>
       </item>
@@ -54,106 +62,95 @@
 
 
   <rule id="Give">
-    <example> give me the handle please </example>
-    <example> give left </example>
-
-    <one-of>
-        <item> 
-          give <tag> out.action = "start_give"; </tag>
-        </item>
-    </one-of>
+    <item> 
+      give <tag> out.action = "give"; </tag>
+    </item>
     <item repeat="0-1"> me </item>
     <ruleref uri="#Object"/>
     <tag> out.object = rules.latest(); </tag>
-    <item repeat="0-1"> please </item>
   </rule>
 
   <rule id="Pick">
-    <example> pick the handle please </example>
-    <example> pick left </example>
-
-    <one-of>
-        <item> 
-          pick <tag> out.action = "start_pick"; </tag>
-        </item>
-    </one-of>
-    <ruleref uri="#Object"/>
-    <tag> out.object = rules.latest(); </tag>
-    <item repeat="0-1"> please </item>
-  </rule>
-
-  <rule id="Hold">
-    <example> hold the handle at pose left please </example>
-    <example> hold object handle pose right </example>
-    <example> hold side front right </example>
-
-    <item repeat="0-1"> please </item>
-    <item>
-      hold <tag> out.action = "start_hold"; </tag>
+    <item> 
+      pick <tag> out.action = "pick"; </tag>
     </item>
     <ruleref uri="#Object"/>
     <tag> out.object = rules.latest(); </tag>
-    <item repeat="0-1"> at </item>
+  </rule>
+
+  <rule id="Hold">
+    <item>
+      hold <tag> out.action = "hold"; </tag>
+    </item>
+    <ruleref uri="#Object"/>
+    <tag> out.object = rules.latest(); </tag>
+    <item repeat="0-1"> on its </item>
     <ruleref uri="#Pose"/>
     <tag> out.pose = rules.latest(); </tag>
-    <item repeat="0-1"> please </item>
   </rule>
 
   <rule id="Object">
     <item repeat="0-1"> the </item>
+    <item repeat="0-1"> side </item>
     <one-of>
-      <item repeat="0-1"> side </item>
       <item>
-        front <tag> out = "/toolbox/side_front"; </tag>
+        front <tag> out = "side_front"; </tag>
       </item>
       <item>
-        back <tag> out = "/toolbox/side_back"; </tag>
+        back <tag> out = "side_back"; </tag>
       </item>
       <item>
-        left <tag> out = "/toolbox/side_left"; </tag>
+        left <tag> out = "side_left"; </tag>
       </item>
       <item>
-        right <tag> out = "/toolbox/side_right"; </tag>
+        right <tag> out = "side_right"; </tag>
       </item>
       <item>
-        handle <tag> out = "/toolbox/handle"; </tag>
+        handle <tag> out = "handle"; </tag>
       </item>
     </one-of>
   </rule>
 
+  <rule id="GoHomeRight">
+    <item>
+      go home right
+    </item>
+  </rule>
+
+  <rule id="GoHomeLeft">
+    <item>
+      go home left
+    </item>
+  </rule>
 
   <rule id="Pose">
     <one-of>
       <item>
-        left <tag> out = "0"; </tag>
+        left <tag> out = "left"; </tag>
       </item>
       <item>
-        right <tag> out = "1"; </tag>
+        right <tag> out = "right"; </tag>
       </item>
     </one-of>
   </rule>
 
   <rule id="DoIt">
     <item repeat="0-1"> yes </item>
-    <one-of>
-      <item>
-        do it
-      </item>
-    </one-of>
+    <item>
+      do it
+    </item>
   </rule>
 
   <rule id="DoSomething">
     <item repeat="0-1"> yes </item>
-    <one-of>
-      <item>
-        do something
-      </item>
-    </one-of>
+    <item>
+      do something
+    </item>
   </rule>
 
   <rule id="SomethingElse">
+    <item repeat="0-1"> do </item>
     <one-of>
-      <item repeat="0-1"> do </item>
       <item>
         something else
       </item>
@@ -165,56 +162,39 @@
 
   <rule id="DontDoThat">
     <item repeat="0-1"> no </item>
-    <one-of>
-      <item>
-        don't do that
-      </item>
-    </one-of>
+    <item>
+      don't do that
+    </item>
   </rule>
 
   <rule id="Start">
-    <item repeat="0-1"> let's </item>
-    <one-of>
-      <item>
-        go
-      </item>
-    </one-of>
+    <item>
+      let's go
+    </item>
   </rule>
 
   <rule id="Restart">
-    <item repeat="0-1"> let's </item>
-    <one-of>
-      <item>
-        restart
-      </item>
-    </one-of>
+    <item>
+      restart
+    </item>
   </rule>
 
   <rule id="Stop">
-    <one-of>
-      <item>
-        it's over
-      </item>
-      <item>
-        we're done
-      </item>
-    </one-of>
+    <item>
+      it's finished
+    </item>
   </rule>
 
   <rule id="Pause">
-    <one-of>
-      <item>
-        pause
-      </item>
-    </one-of>
+    <item>
+      pause
+    </item>
   </rule>
 
   <rule id="Unpause">
-    <one-of>
-      <item>
-        unpause
-      </item>
-    </one-of>
+    <item>
+      unpause
+    </item>
   </rule>
 
 </grammar>
