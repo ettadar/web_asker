@@ -7,5 +7,7 @@ setup(name='web_asker',
       author_email='t.munzer@gmail.com',
       # url='https://www.python.org/sigs/distutils-sig/',
       packages=["web_asker"],
-      package_dir={"" : "src"}
+      package_dir={"" : "src"},
+      data_files=[('config', ['config/grammar_toolbox.xml']),
+                  ('config', ['config/speech_mapping.json'])]
      )

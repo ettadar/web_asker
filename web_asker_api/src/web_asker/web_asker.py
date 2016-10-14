@@ -61,9 +61,9 @@ class WebAsker(object):
         print("Connecting to the Kinect server...")
         self.client = Kinect2Client("BAXTERFLOWERS.local")
         self.client.tts.params.set_language('english')
-        with open(path.join(path.dirname(filename), '..', '..', 'config', 'grammar_toolbox.xml')) as f:
+        with open(path.join(path.dirname(filename), '..', 'config', 'grammar_toolbox.xml')) as f:
             self.action_grammar = f.read()
-        with open(path.join(path.dirname(filename), '..', '..', 'config', 'speech_mapping.json')) as f:
+        with open(path.join(path.dirname(filename), '..', 'config', 'speech_mapping.json')) as f:
             self.mapping = json.load(f)
         self.client.speech.params.set_grammar(self.action_grammar)
         self.client.speech.params.use_system_mic()
